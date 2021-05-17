@@ -1,0 +1,43 @@
+function setup() {
+  createCanvas(400, 400);
+}
+function draw() {
+  background(220);
+}
+The code we write inside the setup function will run once, and the code we write inside the draw function will run repeatedly, in an infinite loop, after that.
+We’ll only be working inside setup, so delete the draw function and everything inside it. You really don’t want the background coded in there, as it will be paint over all the art we’ll put in setup.
+You should be left with:
+function setup() {
+  createCanvas(400, 400);
+}
+This code creates a 400x400 canvas (measured in pixels, which is basically a dot on the screen). I want a bigger canvas, so I’m going to tell the computer to draw art inside the entire window. Specifically, my canvas will be windowWidth x windowHeight.
+Update your setup function to make the canvas fill the whole window:
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+}
+Now, I’m going to fill the canvas with a bunch of randomly-colored, randomly-placed, randomly-sized circles!
+An efficient way to draw 1000 circles
+In computer science, if you want some code to run over and over again, you often put it in a loop. We can use a type of loop called a for loop to make some code run a specific number of times.
+To draw 1000 circles, let’s write a loop that runs 1000 times. Add this code to your setup function:
+for (let i = 0; i < 1000; i++) {
+}
+Basically, we are going to use a variable i to count from 0 to 1000.
+Inside the for loop, we will write code to draw a circle with a random color, random position, and random size.
+Randomness: the hallmark of generative art
+In p5.js, you can generate a random number between 0 and x with the random function: random(x).
+We’ll use this function to generate random colors, positions, and sizes for our circle.
+First, let’s generate a random color. Computers use the RGB color model, where colors are produced by combining different amounts of red, green, and blue on a scale from 0–255.
+Therefore, we can produce a random color by mixing random amounts of red, green, and blue like so:
+random(255), random(255), random(255)
+If you add in a fourth random(255), this will add transparency to the color on a scale from 0 (totally transparent) to 255 (totally opaque).
+Let’s update our for loop to use p5.js’s fill function to set our random color for each circle.
+fill takes in red, green, blue, and transparency values between 0 and 255.
+for (let i = 0; i < 1000; i++) {
+    fill(random(255), random(255), random(255), random(255));
+}
+So far, this for loop draws nothing. But we can use p5.js’s ellipse function to actually draw the circle!
+ellipse takes in the circle’s x-position, y-position, and size. We’ll generate these randomly. Update your for loop to draw an ellipse after setting the color:
+for (let i = 0; i < 1000; i++) {
+    fill(random(255), random(255), random(255), random(255));
+    ellipse(random(windowWidth), random(windowHeight), random(100));
+}
