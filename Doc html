@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<script src="https://code.jquery.com/jquery-5.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css"
+		type="text/css" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		type="text/css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.css"
+		type="text/css" />
+	<link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js">
+	</script>
+
+	<!--Javascript libraries for responsive table-->
+	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+	</script>
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+	<!--Javascrip files: functions and artwork static data-->
+    <script src="assets/js/artwork.js"></script>
+    <script src="assets/js/script.js"></script>
+
+
+	<title>Vincent Van Gogh - Art Locator</title>
+</head>
+
+<body>
+	
+    <!--This is the Header-->
+
+	<header>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top-custom">
+			<a class="navbar-brand" href="index.html">
+				<i class="fas fa-palette"></i>
+				Vincent Van Gogh - Art Locator
+			</a>
+		</nav>
+	</header>
+
+	<!--This is the search section-->
+	
+    <section id="search-section">
+		<div class="container-fluid">
+			<div class="row content-block">
+				<div id="search" class="col-md-3 content py-5">
+					<h3 class="hand-writing">...is today one of the most popular of the post-impressionist painters.</h3>
+					<br>
+                    <br>
+					<h5>Locate the paintings of this iconic Dutch artist:</h5>
+					<br>
+                    <div class="form-inline active-cyan-3 active-cyan-4 mb-4">
+						<i class="fas fa-search" aria-hidden="true"></i>
+						<input id="customSearchBox" class="form-control form-control-sm ml-3 w-75" type="text"
+							placeholder="Painting | Place | Year | etc." aria-label="Search" muted>
+					</div>					
+				</div>
+
+				<div id="datatable" class="col-md-9">
+
+					<table id="artwork" class="display responsive" width="100%">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Created In</th>
+								<th>Year</th>
+								<th>Current Country</th>
+								<th>Current City</th>
+								<th>Current Location</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <!--This is the divider section-->
+	
+    <section id="divider-section">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 py-3">
+					<h5 id="divider-text" class="hand-writing">"I want to touch people with my art. I want them to say 'he feels deeply, he feels tenderly'." - Vincent Van Gogh</h5>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!--This is the location section-->
+
+	<section id="map-area">
+		<div class="container-fluid">
+			<div class="row content-block">
+				
+				<div class="col-md-12">
+					<div id="map" class="row"></div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!--This is the Footer-->
+
+	<footer class="container-fluid page-footer">
+		<div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a href="https://github.com/fredveloper">
+    <i class="fab fa-github"></i> Jose Mota
+    </a>
+  </div>
+	</footer>
+
+	<script
+		src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDHHyac2SiOYPNYxXMK7rqJjnB8nCaaxE&callback=initMap">
+	</script>
+
+</body>
+
+</html>
