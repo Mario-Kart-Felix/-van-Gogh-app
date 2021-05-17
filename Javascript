@@ -1,0 +1,30 @@
+	translate(0, -len);
+	len *= 0.7;
+	angle = random(angle-30, angle+20);
+
+	if (len > 2) {
+		push();
+		rotate(angle);
+		branch(len, angle, gen);
+		pop();
+
+		push();
+		rotate(-angle);
+		branch(len, angle, gen);
+		pop();
+	}
+}
+
+function branchComponent(len, amount, angle) {
+	stroke.apply(null, COLOR_01);
+	var increment = 360/amount;
+	var rotAmount;
+
+	for (var i = 0; i < amount; i++) {
+		push();
+		rotAmount = -180 + increment * i
+		rotate(random(rotAmount - 60, rotAmount));
+		branch(len, angle, 1);
+		pop();
+	}
+}
