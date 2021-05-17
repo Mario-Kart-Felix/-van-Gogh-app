@@ -1,0 +1,30 @@
+body {
+  background: black;  
+}
+#monalisa {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    margin-left: -200px;
+    width: 0;
+    height: 0;
+    box-shadow:
+      0px  0px 4px 5px #6C6E47,
+      5px  0px 4px 5px #686B42,
+     10px  0px 4px 5px #6E7146,
+     15px  0px 4px 5px #6F7244,
+     20px  0px 4px 5px #67683A,
+     25px  0px 4px 5px #767146,
+     30px  0px 4px 5px #747041,
+     35px  0px 4px 5px #726D3C,
+     40px  0px 4px 5px #746D38,
+     45px  0px 4px 5px #706E37,
+     50px  0px 4px 5px #767B4E,
+     55px  0px 4px 5px #7C8451,
+     60px  0px 4px 5px #77895B,
+     65px  0px 4px 5px #75845A,
+     70px  0px 4px 5px #7D8354,
+     75px  0px 4px 5px #7B8152,
+     80px  0px 4px 5px #858956,
+     85px  0px 4px 5px #8E9363,
+     90px  0px 4px 5px #919059,
