@@ -1,0 +1,13 @@
+Shorthand varlist notation
+Joint test that all coefficients on the indicators for a are 0 in all equations
+testparm i.a
+Joint test that all coefficients on the indicators for a are equal to each other in the first equation
+testparm i.a, equal
+As above, but for the equation for y4
+testparm i.a, equal equation(y4)
+Joint test that the coefficients on the indicators for a and b are equal to 0 in all equations
+testparm i.a i.b
+Joint test that all coefficients associated with the interaction of factors a and b are 0
+testparm i.a#i.b
+Menu
+Statistics > Postestimation
