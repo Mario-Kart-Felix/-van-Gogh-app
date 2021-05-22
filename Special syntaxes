@@ -1,0 +1,41 @@
+Special syntaxes after multiple-equation estimation
+Everything said above about tests after single-equation estimation applies to tests after multiple-
+equation estimation, as long as you remember to specify the equation name. To demonstrate, let’s
+estimate a seemingly unrelated regression by using sureg; see [R] sureg.
+. use https://www.stata-press.com/data/r17/auto
+(1978 automobile data)
+. sureg (price foreign mpg displ) (weight foreign length)
+Seemingly unrelated regression
+Equation Obs Params RMSE "R-squared" chi2 P>chi2
+price 74 3 2165.321 0.4537 49.64 0.0000
+weight 74 2 245.2916 0.8990 661.84 0.0000
+Coefficient Std. err. z P>|z| [95% conf. interval]
+price
+foreign 3058.25 685.7357 4.46 0.000 1714.233 4402.267
+mpg -104.9591 58.47209 -1.80 0.073 -219.5623 9.644042
+displacement 18.18098 4.286372 4.24 0.000 9.779842 26.58211
+_cons 3904.336 1966.521 1.99 0.047 50.0263 7758.645
+weight
+foreign -147.3481 75.44314 -1.95 0.051 -295.2139 .517755
+length 30.94905 1.539895 20.10 0.000 27.93091 33.96718
+_cons -2753.064 303.9336 -9.06 0.000 -3348.763 -2157.365
+To test the significance of foreign in the price equation, we could type
+. test [price]foreign
+( 1) [price]foreign = 0
+chi2( 1) = 19.89
+Prob > chi2 = 0.0000
+which is the same result reported by sureg: 4.4602 ≈ 19.89. To test foreign in both equations, we
+could type
+. test [price]foreign [weight]foreign
+( 1) [price]foreign = 0
+( 2) [weight]foreign = 0
+chi2( 2) = 31.61
+Prob > chi2 = 0.0000
+or
+. test foreign
+( 1) [price]foreign = 0
+( 2) [weight]foreign = 0
+chi2( 2) = 31.61
+Prob > chi2 = 0.0000
+This last syntax—typing the variable name by itself—tests the coefficients in all equations in which
+they appear. The variable length appears in only the weight equation, so typing
