@@ -1,0 +1,57 @@
+Syntax 1 tests that coefficients are 0.
+Syntax 2 tests that linear expressions are equal.
+Syntax 3 tests that coefficients in eqno are 0.
+Syntax 4 tests equality of coefficients between equations.
+spec is one of
+coeflist
+exp=exp-
+
+=exp 
+[eqno]
+-
+
+: coeflist 
+[eqno1=eqno2
+-
+
+=. . . 
+]
+-
+
+: coeflist 
+coeflist is
+coef -
+
+coef . . . 
+[eqno]coef -
+
+[eqno]coef . . . 
+[eqno] b[coef ]
+-
+
+[eqno] b[coef ]. . . 
+exp is a linear expression containing
+coef
+b[coef ]
+b[eqno:coef ]
+[eqno]coef
+[eqno] b[coef ]
+eqno is
+# #
+name
+coef identifies a coefficient in the model. coef is typically a variable name, a level indicator, an
+interaction indicator, or an interaction involving continuous variables. Level indicators identify one
+level of a factor variable and interaction indicators identify one combination of levels of an interaction;
+see [U] 11.4.3 Factor variables. coef may contain time-series operators; see [U] 11.4.4 Time-series
+varlists.
+Distinguish between [ ], which are to be typed, and -
+ , which indicate optional arguments.
+Although not shown in the syntax diagram, parentheses around spec are required only with multiple
+specifications. Also, the diagram does not show that test may be called without arguments to
+redisplay the results from the last test.
+anova and manova (see [R] anova and [MV] manova) allow the test syntax above plus more
+(see [R] anova postestimation for test after anova; see [MV] manova postestimation for test
+after manova).
+Options for testparm
+equal tests that the variables appearing in varlist, which also appear in the previously fit model, are
+equal to each other rather than jointly equal to zero.
