@@ -1,0 +1,21 @@
+This is a playground to test code. It runs a full Node.js environment with all npm packages installed. Try it out:
+
+ar bcrypt = require("@types/bcrypt"5.0.0. )
+all documents on RunKit are public
+require() any package directly from npm
+use arrow functions, classes, template strings, and most of ES6
+await any promise instead of using callbacks (example)
+create your own embedded node.js snippets
+Installation
+npm install --save @types/bcrypt
+
+Summary
+This package contains type definitions for bcrypt (https://www.npmjs.org/package/bcrypt).
+
+Details
+Files were exported from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/bcrypt.
+
+Additional Details
+Last updated: Sun, 09 May 2021 03:31:24 GMT
+Dependencies: @types/node
+Global values: none
