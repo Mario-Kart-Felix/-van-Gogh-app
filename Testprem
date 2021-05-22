@@ -1,0 +1,42 @@
+test (2.region=3.region) (2.region=4.region) (3.region=4.region)
+( 1) 2.region - 3.region = 0
+( 2) 2.region - 4.region = 0
+( 3) 3.region - 4.region = 0
+Constraint 3 dropped
+F( 2, 44) = 8.23
+Prob > F = 0.0009
+Equality of regions 2 and 3 and of regions 2 and 4, however, implies equality of regions 3 and 4.
+test recognized that the last constraint is implied by the other constraints and hence dropped it.
+Technical note
+Generally, Stata uses = for assignment, as in gen newvar = exp, and == as the operator for testing
+equality in expressions. For your convenience, test allows both = and == to be used.
+Example 10
+The test for the equality of the regions is also possible with the testparm command. When we
+include the equal option, testparm tests that the coefficients of all the variables specified are equal:
+. testparm i(2/4).region, equal
+( 1) - 2.region + 3.region = 0
+( 2) - 2.region + 4.region = 0
+F( 2, 44) = 8.23
+Prob > F = 0.0009
+We can also obtain the equality test by accumulating single equality tests.
+. test 2.region=3.region, notest
+( 1) 2.region - 3.region = 0
+. test 2.region=4.region, accum
+( 1) 2.region - 3.region = 0
+( 2) 2.region - 4.region = 0
+F( 2, 44) = 8.23
+Prob > F = 0.0009
+Technical note
+If we specify a set of inconsistent constraints, test will tell us by dropping the constraint or
+constraints that led to the inconsistency. For instance, let’s test that the coefficients on region 2 and
+region 4 are the same, add the test that the coefficient on region 2 is 20, and finally add the test that
+the coefficient on region 4 is 21:
+. test (2.region=4.region) (2.region=20) (4.region=21)
+( 1) 2.region - 4.region = 0
+( 2) 2.region = 20
+( 3) 4.region = 21
+Constraint 2 dropped
+F( 2, 44) = 1.82
+Prob > F = 0.1737
+test informed us that it was dropping constraint 2. All three equations cannot be simultaneously
+true, so test drops whatever it takes to get back to something that makes sense.
