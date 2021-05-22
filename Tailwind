@@ -1,0 +1,82 @@
+CSS: @tailwindcss/jit
+The big issue with Tailwind is that it pulls a huge amount of CSS classes into the parser, in the form of a 3.6 MB CSS file - or 6.0 MB if you enable dark mode. This is heavy on PostCSS, uses a lot of memory (our server would frequently trigger OOM kills).
+
+Enter @tailwindcss/jit, a drop-in replacement (though not with 100% feature parity yet) that collects the classes used by your files and only generates the requested classes.
+
+Outdated PostCSS plugins
+In this process, we had to get rid of two PostCSS plugins that were not updated to work with PostCSS 8, which is required by @tailwindcss/jit: precss and postcss-rtl, both of which are unmaintained and won't be updated.
+
+We replaced the former with postcss-nesting and rewritten the CSS to not use the rest of the features from precss - in our case, this was an easy job.
+
+The latter was replaced by tailwindcss-rtl, which is instead a Tailwind plugin. It works great and requires very little effort, you just need to search and replace some non-RTL classes with RTL equivalents - which I expect to be easily swappable once Tailwind supports CSS Logical Properties.
+
+These are the changes required in webpack.config.js:
+    module: {
+        rules: [
+            ...
+            {
+                test: /\.css$/,
+                use: [
+                    ...,
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+-                           postcssOptions: { plugins: ['postcss-import', 'postcss-url', 'tailwindcss', 'precss', 'postcss-rtl'] },
++                           postcssOptions: { plugins: ['postcss-import', 'postcss-url', '@tailwindcss/jit'] },
+                        },
+                    },
+                ],
+            },
+            ...
+        ],
+    },
+    ...
+Don't forget to update your tailwind.config.js file, the instructions are in the @tailwindcss/jit README.
+
+Results
+This has the benefit of not only reducing the load on the parser, but also generating a much smaller CSS file by default, even without minification: a drop from 17.2 MB to 461 KiB before PurgeCSS for the SPA, and from 110 KiB to 1.34 KiB for the Next.js website.
+
+With only that change so far, it reduces the build time to 66s for the SPA and to an amazing 26s for Next.js. I guess that the SPA didn't benefit as much because it uses much more classes - as evidenced by the significantly smaller CSS output.
+
+Typescript: esbuild & esbuild-loader
+esbuild is a JS and TS bundler that promises ultra-fast build times. We use webpack, and there is support to leverage esbuild with esbuild-loader.
+
+Using esbuild-loader is really simple, we just need to swap ts-loader (or babel-loader, but I didn't use that) with esbuild-loader in your webpack.config.js:
+    ...
+    module: {
+        rules: [
+            ...
+            {
+                test: /\.tsx?$/,
+                use: [
+                    'cache-loader',
+-                   'ts-loader',
++                   {
++                       loader: 'esbuild-loader',
++                       options: { loader: 'tsx' },
++                   },
+                ],
+            },
+            ...
+        ],
+    },
+    ...
+Furthermore, since we use the new JSX transform and esbuild does not support it yet, instead transforming JSX to calls to React.createElement which is not available, we need to provide a global React variable. This is super simple with webpack:
++const { ProvidePlugin } = require('webpack');
+
+    ...
+    plugins: [
+        ...
++       new ProvidePlugin({
++           React: 'react',
++       }),
+    ],
+    ...
+The improvement, in real life, is not as huge as advertised in esbuild's website - I guess because it is not pure JS/TS - but still very significant: building the SPA now takes less than 20s. However, we didn't see as much improvement for Next.js, now taking about 22s. It doesn't hurt, so we will keep it 🤷
+
+Conclusion
+We brought down the build time from 84s down to 20s for a React SPA, and from a painful 112s down to 22s for a Next.js SSR website by just swapping the tools used to build. No features were harmed in the process, and we even ended up with less generated CSS.
+
+Additionally, our pipelines used to take at least 5 minutes for a full build and deploy, and now only take around 3 minutes, caching and spinning the containers included, and it does not run out of RAM anymore. Mission accomplished.
+
+On a separate note, we haven't suffered from this out-of-memory situation since we made the switch, and it seems to be related with excessive amounts of CSS.
