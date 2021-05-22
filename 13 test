@@ -1,0 +1,44 @@
+. use https://www.stata-press.com/data/r17/census4
+(Census data on birthrate, median age)
+. regress brate medage c.medage#c.medage reg2 reg3 reg4
+(output omitted )
+. test reg2-reg4
+- not found
+r(111);
+In a varlist, reg2-reg4 means variables reg2 and reg4 and all the variables between, yet we received
+an error. test is confused because the - has two meanings: it means subtraction in an expression
+and “through” in a varlist. Similarly, ‘*’ means “any set of characters” in a varlist and multiplication
+in an expression. testparm avoids this confusion—it allows only a varlist.
+. testparm reg2-reg4
+( 1) reg2 = 0
+( 2) reg3 = 0
+( 3) reg4 = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+testparm has another advantage. We have five variables in our dataset that start with the characters
+reg: region, reg1, reg2, reg3, and reg4. reg* thus means those five variables:
+. describe reg*
+Variable Storage Display Value
+name type format label Variable label
+region byte %8.0g region Census region
+reg1 byte %9.0g Region: NE
+reg2 byte %9.0g Region: N Cntrl
+reg3 byte %9.0g Region: South
+reg4 byte %9.0g Region: West
+We cannot type test reg* because, in an expression, ‘*’ means multiplication, but here is what
+would happen if we attempted to test all the variables that begin with reg:
+. test region reg1 reg2 reg3 reg4
+region not found
+r(111);
+The variable region was not included in our model, so it was not found. However, with testparm,
+. testparm reg*
+( 1) reg2 = 0
+( 2) reg3 = 0
+( 3) reg4 = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+That is, testparm took reg* to mean all variables that start with reg that were in our model.
+Technical note
+Actually, reg* means what it always does—all variables in our dataset that begin with reg—in
+this case, region reg1 reg2 reg3 reg4. testparm just ignores any variables you specify that are
+not in the model.
