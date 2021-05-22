@@ -1,0 +1,44 @@
+Example 8: Replaying the previous test
+We just used test (testparm, actually, but it does not matter) to test the hypothesis that reg2,
+reg3, and reg4 are jointly zero. We can review the results of our last test by typing test without
+arguments:
+. test
+( 1) reg2 = 0
+( 2) reg3 = 0
+( 3) reg4 = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+Technical note
+test does not care how we build joint hypotheses; we may freely mix different forms of syntax.
+(We can even start with testparm, but we cannot use it thereafter because it does not have an
+accumulate option.)
+Say that we type test reg2 reg3 reg4 to test that the coefficients on our region dummies
+are jointly zero. We could then add a fourth constraint, say, that medage = 100, by typing test
+medage=100, accumulate. Or, if we had introduced the medage constraint first (our first test
+command had been test medage=100), we could then add the region dummy test by typing test
+reg2 reg3 reg4, accumulate or test (reg2=0) (reg3=0) (reg4=0), accumulate.
+Remember that all previous tests are cleared when we do not specify the accumulate option. No
+matter what tests we performed in the past, if we type test medage c.medage#c.medage, omitting
+the accumulate option, we would test that medage and c.medage#c.medage are jointly zero.
+Example 9: Testing the equality of multiple coefficients
+Let’s return to our census3.dta dataset and test the hypothesis that all the included regions have
+the same coefficient—that the Northeast is significantly different from the rest of the nation:
+. use https://www.stata-press.com/data/r17/census3
+(1980 Census data by state)
+. regress brate medage c.medage#c.medage i.region
+(output omitted )
+. test 2.region=3.region=4.region
+( 1) 2.region - 3.region = 0
+( 2) 2.region - 4.region = 0
+F( 2, 44) = 8.23
+Prob > F = 0.0009
+We find that they are not all the same. The syntax 2.region=3.region=4.region with multiple
+= operators is just a convenient shorthand for typing that the first expression equals the second
+expression and that the first expression equals the third expression,
+. test (2.region=3.region) (2.region=4.region)
+We performed the test for equality of the three regions by imposing two constraints: region 2 has
+the same coefficient as region 3, and region 2 has the same coefficient as region 4. Alternatively, we
+could have tested that the coefficients on regions 2 and 3 are the same and that the coefficients on
+regions 3 and 4 are the same. We would obtain the same results in either case.
+To test for equality of the three regions, we might, likely by mistake, type equality constraints for
+all pairs of regions:
