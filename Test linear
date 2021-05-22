@@ -1,0 +1,21 @@
+6 test — Test linear hypotheses after estimation
+equation(eqno) is relevant only for multiple-equation models, such as mvreg, mlogit, and heckman.
+It specifies the equation for which the all-zero or all-equal hypothesis is tested. equation(#1)
+specifies that the test be conducted regarding the first equation #1. equation(price) specifies
+that the test concern the equation named price.
+nosvyadjust is for use with svy estimation commands; see [SVY] svy estimation. It specifies that
+the Wald test be carried out without the default adjustment for the design degrees of freedom. That
+is, the test is carried out as W/k ∼ F(k, d) rather than as (d−k + 1)W/(kd) ∼ F(k, d−k + 1),
+where k = the dimension of the test and d = the total number of sampled PSUs minus the total
+number of strata. When the df() option is used, it will override the default design degrees of
+freedom.
+The following option is available with testparm but is not shown in the dialog box:
+df(#) specifies that the F distribution with # denominator degrees of freedom be used for the
+reference distribution of the test statistic. The default is to use e(df r) degrees of freedom or
+the χ
+2
+distribution if e(df r) is missing. With survey data, # is the design degrees of freedom
+unless nosvyadjust is specified.
+Options for test
+✄
+✄ 
