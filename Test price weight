@@ -1,0 +1,45 @@
+test [price=weight], common
+( 1) [price]foreign - [weight]foreign = 0
+chi2( 1) = 23.07
+Prob > chi2 = 0.0000
+By default, test does not include the constant, the coefficient of the constant variable cons, in
+the test. The cons option specifies that the constant be included.
+. test [price=weight], common cons
+( 1) [price]foreign - [weight]foreign = 0
+( 2) [price]_cons - [weight]_cons = 0
+chi2( 2) = 51.23
+Prob > chi2 = 0.0000
+We can also use a modification of this syntax with the model if we also type a colon and the names
+of the variables we want to test:
+. test [price=weight]: foreign
+( 1) [price]foreign - [weight]foreign = 0
+chi2( 1) = 23.07
+Prob > chi2 = 0.0000
+We have only one variable in common between the two equations, but if there had been more, we
+could have listed them.
+Finally, a simultaneous test of multiple constraints may be specified just as after single-equation
+estimation.
+. test ([price]: foreign) ([weight]: foreign)
+( 1) [price]foreign = 0
+( 2) [weight]foreign = 0
+chi2( 2) = 31.61
+Prob > chi2 = 0.0000
+test can also test for equality of coefficients across more than two equations. For instance, test
+[eq1=eq2=eq3] specifies a test that the coefficients in the three equations eq1, eq2, and eq3 are
+equal. This requires that the same variables be included in the three equations. If some variables are
+entered only in some of the equations, you can type test [eq1=eq2=eq3], common to test that the
+coefficients of the variables common to all three equations are equal. Alternatively, you can explicitly
+list the variables for which equality of coefficients across the equations is to be tested. For instance,
+test [eq1=eq2=eq3]: time money tests that the coefficients of the variables time and money do
+not differ between the equations.
+Technical note
+test [eq1=eq2=eq3], common tests the equality of the coefficients common to all equations,
+but it does not test the equality of all common coefficients. Consider the case where
+eq1 contains the variables var1 var2 var3
+eq2 contains the variables var1 var2 var4
+eq3 contains the variables var1 var3 var4
+Obviously, only var1 is common to all three equations. Thus test [eq1=eq2=eq3], common
+tests that the coefficients of var1 do not vary across the equations, so it is equivalent to test
+[eq1=eq2=eq3]: var1. To perform a test of the coefficients of variables common to two equations,
+you could explicitly list the constraints to be tested,
+. test ([eq1=eq2=eq3]:var1) ([eq1=eq2]:var2) ([eq1=eq3]:var3) ([eq2=eq3]:var4
