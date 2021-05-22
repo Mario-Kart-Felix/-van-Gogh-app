@@ -1,0 +1,41 @@
+10 test — Test linear hypotheses after estimation
+Example 2: Testing the value of a single coefficient
+If that were all test could do, it would be useless. We can use test, however, to perform other
+tests. For instance, we can test the hypothesis that the coefficient on 2.region is 21 by typing
+. test 2.region=21
+( 1) 2.region = 21
+F( 1, 44) = 1.99
+Prob > F = 0.1654
+We find that we cannot reject that hypothesis, or at least we cannot reject it at any significance level
+below 16.5%.
+Example 3: Testing the equality of two coefficients
+The previous test is useful, but we could almost as easily perform it by hand using the results
+presented in the regression output if we were well read on our statistics. We could type
+. display Ftail(1,44,((_coef[2.region]-21)/4.252068)^2)
+.16544873
+So, now let’s test something a bit more difficult: whether the coefficient on 2.region is the same
+as the coefficient on 4.region:
+. test 2.region=4.region
+( 1) 2.region - 4.region = 0
+F( 1, 44) = 2.84
+Prob > F = 0.0989
+We find that we cannot reject the equality hypothesis at the 5% level, but we can at the 10% level.
+Example 4
+When we tested the equality of the 2.region and 4.region coefficients, Stata rearranged our
+algebra. When Stata displayed its interpretation of the specified test, it indicated that we were testing
+whether 2.region minus 4.region is zero. The rearrangement is innocuous and, in fact, allows
+Stata to perform much more complicated algebra, for instance,
+. test 2*(2.region-3*(3.region-4.region))=3.region+2.region+6*(4.region-3.region)
+( 1) 2.region - 3.region = 0
+F( 1, 44) = 5.06
+Prob > F = 0.0295
+Although we requested what appeared to be a lengthy hypothesis, once Stata simplified the algebra,
+it realized that all we wanted to do was test whether the coefficient on 2.region is the same as the
+coefficient on 3.region.
+Technical note
+Stata’s ability to simplify and test complex hypotheses is limited to linear hypotheses. If you
+attempt to test a nonlinear hypothesis, you will be told that it is not possible:
+. test 2.region/3.region=2.region+3.region
+not possible with test
+r(131);
+To test a nonlinear hypothesis, see [R] testnl
