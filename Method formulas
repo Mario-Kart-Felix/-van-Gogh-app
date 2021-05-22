@@ -1,0 +1,69 @@
+Methods and formulas
+test and testparm perform Wald tests. Let the estimated coefficient vector be b and the estimated
+variance –covariance matrix be V. Let Rb = r denote the set of q linear hypotheses to be tested
+jointly.
+The Wald test statistic is (Judge et al. 1985, 20 – 28)
+W = (Rb − r)
+0
+(RVR0
+)
+−1
+(Rb − r)
+If the estimation command reports its significance levels using Z statistics, a χ
+2
+distribution with
+q degrees of freedom,
+W ∼ χ
+2
+q
+is used for computation of the significance level of the hypothesis test.
+If the estimation command reports its significance levels using t statistics with d degrees of freedom,
+an F statistic,
+F =
+1
+q
+W
+is computed, and an F distribution with q numerator degrees of freedom and d denominator degrees
+of freedom computes the significance level of the hypothesis test.
+The two-step constrained estimates bc displayed by test with the coef option are the GLS estimates
+of the unconstrained estimates b subject to the specified constraints Rb = c (Gourieroux and Monfort
+1995, chap. 10),
+bc = b − VR0
+(RVR0
+)
+−1
+(Rb − r)
+with variance –covariance matrix
+Vc = V − VR0
+(RVR0
+)
+−1RV
+If test displays a Wald test for joint (simultaneous) hypotheses, it can also display all 1-degree-of-
+freedom tests, with p-values adjusted for multiple testing. Let p1, p2, . . . , pk be the unadjusted p-values
+of these 1-degree-of-freedom tests. The Bonferroni-adjusted p-values are defined as p
+b
+i = min(1, kpi).
+The Sid ˇ ak-adjusted ´ p-values are p
+s
+i = 1−(1−pi)
+k
+. Holm’s method for adjusting p-values is defined
+as p
+h
+i = min(1, kipi), where ki
+is the number of p-values at least as large as pi
+. Note that p
+h
+i < pb
+i
+,
+reflecting that Holm’s method is strictly less conservative than the widely used Bonferroni method.
+If test is used after a svy command, it carries out an adjusted Wald test—this adjustment should
+not be confused with the adjustment for multiple testing. Both adjustments may actually be combined.
+Specifically, the survey adjustment uses an approximate F statistic (d−k+1)W/(kd), where W is the
+Wald test statistic, k is the dimension of the hypothesis test, and d = the total number of sampled PSUs
+minus the total number of strata. Under the null hypothesis, (d−k+1)F/(kd) ∼ F(k, d−k+1), where
+F(k, d−k +1) is an F distribution with k numerator degrees of freedom and d−k +1 denominator
+degrees of freedom. If nosvyadjust is specified, the p-value is computed using W/k ∼ F(k, d).
+See Korn and Graubard (1990) for a detailed description of the Bonferroni adjustment technique
+and for a discussion of the relative merits of it and of the adjusted and unadjusted Wald tests.
