@@ -1,0 +1,35 @@
+or use test with the accumulate option, and maybe also with the notest option, to form the
+appropriate joint hypothesis:
+. test [eq1=eq2], common notest
+. test [eq1=eq3], common accumulate notest
+. test [eq2=eq3], common accumulate
+Constrained coefficients
+If the test indicates that the data do not allow you to conclude that the constraints are not satisfied,
+you may want to inspect the constrained coefficients. The coef option specified that the constrained
+results, estimated by GLS, are shown.
+. test [price=weight], common coef
+( 1) [price]foreign - [weight]foreign = 0
+chi2( 1) = 23.07
+Prob > chi2 = 0.0000
+Constrained coefficients
+Coefficient Std. err. z P>|z| [95% conf. interval]
+price
+foreign -216.4015 74.06083 -2.92 0.003 -361.558 -71.2449
+mpg -121.5717 58.36972 -2.08 0.037 -235.9742 -7.169116
+displacement 7.632566 3.681114 2.07 0.038 .4177148 14.84742
+_cons 7312.856 1834.034 3.99 0.000 3718.215 10907.5
+weight
+foreign -216.4015 74.06083 -2.92 0.003 -361.558 -71.2449
+length 30.34875 1.534815 19.77 0.000 27.34057 33.35693
+_cons -2619.719 302.6632 -8.66 0.000 -3212.928 -2026.51
+The constrained coefficient of foreign is −216.40 with standard error 74.06 in equations price
+and weight. The other coefficients and their standard errors are affected by imposing the equality
+constraint of the two coefficients of foreign because the unconstrained estimates of these two
+coefficients were correlated with the estimates of the other coefficients.
+Technical note
+The two-step constrained coefficients bc displayed by test, coef are asymptotically equivalent to
+the one-stage constrained estimates that are computed by specifying the constraints during estimation
+using the constraint() option of estimation commands (Gourieroux and Monfort 1995, chap. 10).
+Generally, one-step constrained estimates have better small-sample properties. For inspection and
+interpretation, however, two-step constrained estimates are a convenient alternative. Moreover, some
+estimation commands (for example, stcox, many xt estimators) do not have a constraint() option.
