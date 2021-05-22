@@ -1,0 +1,34 @@
+Title stata.com
+test — Test linear hypotheses after estimation
+Description Quick start Menu Syntax
+Options for testparm Options for test Remarks and examples Stored results
+Methods and formulas Acknowledgment References Also see
+Description
+test performs Wald tests of simple and composite linear hypotheses about the parameters of the
+most recently fit model.
+test supports svy estimators (see [SVY] svy estimation), carrying out an adjusted Wald test by
+default in such cases. test can be used with svy estimation results, see [SVY] svy postestimation.
+testparm provides a useful alternative to test that permits varlist rather than a list of coefficients
+(which is often nothing more than a list of variables), allowing the use of standard Stata notation,
+including ‘-’ and ‘*’, which are given the expression interpretation by test.
+test and testparm perform Wald tests. For likelihood-ratio tests, see [R] lrtest. For Wald-type
+tests of nonlinear hypotheses, see [R] testnl. To display estimates for one-dimensional linear or
+nonlinear expressions of coefficients, see [R] lincom and [R] nlcom.
+See [R] anova postestimation for additional test syntax allowed after anova.
+See [MV] manova postestimation for additional test syntax allowed after manova.
+Quick start
+Linear tests after single-equation models
+Joint test that the coefficients on x1 and x2 are equal to 0
+test x1 x2
+Joint test that coefficients on factor indicators 2.a and 3.a are equal to 0
+test 2.a 3.a
+Test that coefficients on indicators 2.a and 3.a are equal
+test 2.a = 3.a
+Joint test that coefficients on indicators 1.a, 2.a, and 3.a are all equal
+test (1.a=2.a) (1.a=3.a)
+Same as above
+test 1.a=2.a=3.a
+As above, but add separate tests for each pairing
+test 1.a=2.a=3.a, mtest
+As above, but with p-values adjusted for multiple comparisons using Sid ˇ ak’s method ´
+test (1.a=2.a) (1.a=3.a), mtest(sidak)
