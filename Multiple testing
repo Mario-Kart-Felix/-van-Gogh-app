@@ -1,0 +1,42 @@
+Multiple testing
+When performing the test of a joint hypothesis, you might want to inspect the underlying 1-degree-
+of-freedom hypotheses. Which constraint “is to blame”? test displays the univariate as well as the
+simultaneous test if the mtest option is specified. For example,
+. test [price=weight], common cons mtest
+( 1) [price]foreign - [weight]foreign = 0
+( 2) [price]_cons - [weight]_cons = 0
+chi2 df p > chi2
+(1) 23.07 1 0.0000*
+(2) 11.17 1 0.0008*
+All 51.23 2 0.0000
+* Unadjusted p-values
+Both coefficients seem to contribute to the highly significant result. The 1-degree-of-freedom test
+shown here is identical to those if test had been invoked to test just this simple hypotheses. There is,
+of course, a real risk in inspecting these simple hypotheses. Especially in high-dimensional hypotheses,
+you may easily find one hypothesis that happens to be significant. Multiple testing procedures are
+designed to provide some safeguard against this risk. p-values of the univariate hypotheses are modified
+so that the probability of falsely rejecting one of the null hypotheses is bounded. test provides the
+methods based on Bonferroni, Sid ˇ ak, and Holm. ´
+. test [price=weight], common cons mtest(b)
+( 1) [price]foreign - [weight]foreign = 0
+( 2) [price]_cons - [weight]_cons = 0
+chi2 df p > chi2
+(1) 23.07 1 0.0000*
+(2) 11.17 1 0.0017*
+All 51.23 2 0.0000
+* Bonferroni-adjusted p-values
+Stored results
+test and testparm store the following in r():
+Scalars
+r(p) two-sided p-value r(chi2) χ
+2
+r(F) F statistic r(ss) sum of squares (test)
+r(df) test constraints degrees of freedom r(rss) residual sum of squares
+r(df r) residual degrees of freedom r(drop) 1 if constraints were dropped, 0
+r(dropped i) index of ith constraint dropped otherwise
+Macros
+r(mtmethod) method of adjustment for multiple
+testing
+Matrices
+r(mtest) multiple test results
+r(ss) and r(rss) are defined only when test is used for testing effects after anova.
