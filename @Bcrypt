@@ -1,0 +1,47 @@
+The bcrypt library on NPM makes it really easy to hash and compare passwords in Node. If you're coming from a PHP background, these are roughly equivalent to password_hash() and password_verify().
+
+Bcrypt is the de facto way to hash and store passwords. For a brief explanation of why we use one-way hashes instead of encryption, check out this answer on StackOverflow.
+
+Installing #
+To use the library, simply install with NPM:
+
+npm install --save bcrypt
+Then include it like this:
+
+const bcrypt = require('bcrypt');
+Creating and verifying a password hash #
+Bcrypt supports both sync and async methods. The asynchronous approach is recommended because hashing is CPU intensive, and the synchronous version will block the event loop and prevent your app from handling other requests until it finishes.
+
+Thus, while the sync version is more convenient, it's best to stick with async if you're concerned about performance.
+
+Asynchronous version #
+Hashing a password is as simple as this. The second argument is the number of rounds to use when generating a salt.
+
+bcrypt.hash('myPassword', 10, function(err, hash) {
+  // Store hash
+});
+To verify the password later on:
+
+bcrypt.compare('somePassword', hash, function(err, res) {
+  if (res) {
+   // Passwords match
+  } else {
+   // Passwords don't match
+  }
+});
+Synchronous version #
+If you prefer a synchronous approach, you can do this instead:
+
+let hash = bcrypt.hashSync('myPassword', 10);
+
+// Store hash
+To verify the password later on:
+
+if (bcrypt.compareSync('somePassword', hash)) {
+ // Passwords match
+} else {
+ // Passwords don't match
+}
+That's it! You've just hashed and verified your first password using Node.js and bcrypt!
+
+DEVELOPMENT JAVASCRIPT NODE.JS
