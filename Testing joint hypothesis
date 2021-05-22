@@ -1,0 +1,46 @@
+Example 5: Testing joint hypotheses
+The real power of test is demonstrated when we test joint hypotheses. Perhaps we wish to test
+whether the region variables, taken as a whole, are significant by testing whether the coefficients on
+2.region, 3.region, and 4.region are simultaneously zero. test allows us to specify multiple
+conditions to be tested, each embedded within parentheses.
+. test (2.region=0) (3.region=0) (4.region=0)
+( 1) 2.region = 0
+( 2) 3.region = 0
+( 3) 4.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+test displays the set of conditions and reports an F statistic of 8.85. test also reports the degrees
+of freedom of the test to be 3, the “dimension” of the hypothesis, and the residual degrees of freedom,
+44. The significance level of the test is close to 0, so we can strongly reject the hypothesis of no
+difference between the regions.
+An alternative method to specify simultaneous hypotheses uses the convenient shorthand of
+conditions with multiple equality operators.
+. test 2.region=3.region=4.region=0
+( 1) 2.region - 3.region = 0
+( 2) 2.region - 4.region = 0
+( 3) 2.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+Technical note
+Another method to test simultaneous hypotheses is to specify a test for each constraint and
+accumulate it with the previous constraints:
+. test 2.region=0
+( 1) 2.region = 0
+F( 1, 44) = 12.45
+Prob > F = 0.0010
+. test 3.region=0, accumulate
+( 1) 2.region = 0
+( 2) 3.region = 0
+F( 2, 44) = 6.42
+Prob > F = 0.0036
+. test 4.region=0, accumulate
+( 1) 2.region = 0
+( 2) 3.region = 0
+( 3) 4.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+We tested the hypothesis that the coefficient on 2.region was zero by typing test 2.region=0.
+We then tested whether the coefficient on 3.region was also zero by typing test 3.region=0,
+accumulate. The accumulate option told Stata that this was not the start of a new test but a
+continuation of a previous one. Stata responded by showing us the two equations and reporting an
+F statistic of 6.42. The significance level associated with those two coefficients being zero is 0.36%.
