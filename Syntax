@@ -1,0 +1,62 @@
+4 test — Test linear hypotheses after estimation
+Syntax
+Basic syntax
+test coeflist (Syntax 1)
+test exp=exp-
+
+=. . . 
+(Syntax 2)
+test [eqno]
+-
+
+: coeflist 
+(Syntax 3)
+test [eqno=eqno-
+
+=. . .
+]
+-
+
+: coeflist 
+(Syntax 4)
+testparm varlist -
+
+, testparm options 
+Full syntax
+test (spec)
+-
+
+(spec) . . .  -
+ , test options 
+testparm options Description
+equal hypothesize that the coefficients are equal to each other
+equation(eqno) specify equation name or number for which the hypothesis is tested
+nosvyadjust compute unadjusted Wald tests for survey results
+df(#) use F distribution with # denominator degrees of freedom for the reference
+distribution of the test statistic; for survey data, # specifies the design
+degrees of freedom unless nosvyadjust is specified
+df(#) does not appear in the dialog box.
+test options Description
+Options
+mtest-
+
+(opt)
+
+test each condition separately
+coef report estimated constrained coefficients
+accumulate test hypothesis jointly with previously tested hypotheses
+notest suppress the output
+common test only variables common to all the equations
+constant include the constant in coefficients to be tested
+nosvyadjust compute unadjusted Wald tests for survey results
+minimum perform test with the constant, drop terms until the test
+becomes nonsingular, and test without the constant on the
+remaining terms; highly technical
+matvlc(matname) save the variance–covariance matrix; programmer’s option
+df(#) use F distribution with # denominator degrees of freedom for the reference
+distribution of the test statistic; for survey data, # specifies the design
+degrees of freedom unless nosvyadjust is specified
+matvlc(matname) and df(#) do not appear in the dialog box.
+coeflist and varlist may contain factor variables and time-series operators; see [U] 11.4.3 Factor variables and
+[U] 11.4.4 Time-series varlists.
+collect is allowed with test; see [U] 11.1.10 Prefix commands.
