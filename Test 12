@@ -1,0 +1,43 @@
+12 test — Test linear hypotheses after estimation
+When we added the last constraint test 4.region=0, accumulate, we discovered that the three
+region variables are significant. If all we wanted was the overall significance and we did not want to
+bother seeing the interim results, we could have used the notest option:
+. test 2.region=0, notest
+( 1) 2.region = 0
+. test 3.region=0, accumulate notest
+( 1) 2.region = 0
+( 2) 3.region = 0
+. test 4.region=0, accumulate
+( 1) 2.region = 0
+( 2) 3.region = 0
+( 3) 4.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+Example 6: Quickly testing coefficients against zero
+Because tests that coefficients are zero are so common in applied statistics, the test command
+has a more convenient syntax to accommodate this case:
+. test 2.region 3.region 4.region
+( 1) 2.region = 0
+( 2) 3.region = 0
+( 3) 4.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+Example 7: Specifying varlists
+We will now show how to use testparm. In its first syntax, test accepts a list of variable names
+but not a varlist.
+. test i(2/4).region
+i not found
+r(111);
+In the varlist, i(2/4).region means all the level variables from 2.region through 4.region,
+yet we received an error. test does not actually understand varlists, but testparm does. In fact, it
+understands only varlists.
+. testparm i(2/4).region
+( 1) 2.region = 0
+( 2) 3.region = 0
+( 3) 4.region = 0
+F( 3, 44) = 8.85
+Prob > F = 0.0001
+Another way to test all the region variables is to type testparm i.region.
+That testparm accepts varlists has other advantages that do not involve factor variables. Suppose
+that we have a dataset that has dummy variables reg2, reg3, and reg4, rather than the categorical
+variable region.
