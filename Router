@@ -1,0 +1,17 @@
+Examples
+Using Router
+next/link should be able to cover most of your routing needs, but you can also do client-side navigations without it, take a look at the documentation for next/router.
+
+The following example shows how to do basic page navigations with useRouter:
+
+import { useRouter } from 'next/router'
+
+function ReadMore() {
+  const router = useRouter()
+
+  return (
+    <span onClick={() => router.push('/about')}>Click here to read more</span>
+  )
+}
+
+export default ReadMore
