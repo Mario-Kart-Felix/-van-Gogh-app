@@ -1,0 +1,38 @@
+8 test — Test linear hypotheses after estimation
+with an independent variable. You might type, for instance, test [#2]x1+[#2]x2=[#2]x3 to test
+the constraint in equation 2 or, more readably, test [ford]x1+[ford]x2=[ford]x3, meaning that
+Stata will test the constraint on the equation corresponding to ford, which might be equation 2. ford
+would be an equation name after, say, sureg, or, after mlogit, ford would be one of the outcomes.
+For mlogit, you could also type test [2]x1+[2]x2=[2]x3— note the lack of the #—meaning not
+equation 2, but the equation corresponding to the numeric outcome 2. You can even test constraints
+across equations: test [ford]x1+[ford]x2=[buick]x3.
+The syntax
+test coeflist
+is available after all estimation commands and is a convenient way to test that multiple coefficients
+are zero following estimation. A coeflist can simply be a list of variable names,
+test varname -
+
+varname . . . 
+and it is most often specified that way. After you have fit a model of depvar on x1, x2, and x3,
+typing test x1 x3 tests that the coefficients on x1 and x3 are jointly zero. After multiple-equation
+estimation, this would test that the coefficients on x1 and x3 are zero in all equations that contain
+them. You can also be more explicit and type, for instance, test [ford]x1 [ford]x3 to test that
+the coefficients on x1 and x3 are zero in the equation for ford.
+In the multiple-equation case, there are more alternatives. You could also test that the coefficients
+on x1 and x3 are zero in the equation for ford by typing test [ford]: x1 x3. You could test that
+all coefficients except the coefficient on the constant are zero in the equation for ford by typing test
+[ford]. You could test that the coefficients on x1 and x3 in the equation for ford are equal to the
+corresponding coefficients in the equation corresponding to buick by typing test[ford=buick]:
+x1 x3. You could test that all the corresponding coefficients except the constant in three equations
+are equal by typing test [ford=buick=volvo].
+testparm is much like the first syntax of test. Its usefulness will be demonstrated below.
+The examples below use regress, but what is said applies equally after any single-equation
+estimation command (such as logistic). It also applies after multiple-equation estimation commands
+as long as references to coefficients are qualified with an equation name or number in square brackets
+placed before them. The convenient syntaxes for dealing with tests of many coefficients in multiple-
+equation models are demonstrated in Special syntaxes after multiple-equation estimation below.
+Example 1: Testing for a single coefficient against zero
+We have 1980 census data on the 50 states recording the birth rate in each state (brate), the
+median age (medage), and the region of the country in which each state is located.
+The region variable is 1 if the state is in the Northeast, 2 if the state is in the North Central, 3
+if the state is in the South, and 4 if the state is in the West. We estimate the following regression:
