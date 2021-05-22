@@ -1,0 +1,43 @@
+. test length
+( 1) [weight]length = 0
+chi2( 1) = 403.94
+Prob > chi2 = 0.0000
+yields the same result as typing test [weight]length. We may also specify a linear expression
+rather than a list of coefficients:
+. test mpg=displ
+( 1) [price]mpg - [price]displacement = 0
+chi2( 1) = 4.85
+Prob > chi2 = 0.0277
+or
+. test [price]mpg = [price]displ
+( 1) [price]mpg - [price]displacement = 0
+chi2( 1) = 4.85
+Prob > chi2 = 0.0277
+A variation on this syntax can be used to test cross-equation constraints:
+. test [price]foreign = [weight]foreign
+( 1) [price]foreign - [weight]foreign = 0
+chi2( 1) = 23.07
+Prob > chi2 = 0.0000
+Typing an equation name in square brackets by itself tests all the coefficients except the intercept
+in that equation:
+. test [price]
+( 1) [price]foreign = 0
+( 2) [price]mpg = 0
+( 3) [price]displacement = 0
+chi2( 3) = 49.64
+Prob > chi2 = 0.0000
+Typing an equation name in square brackets, a colon, and a list of variable names tests those variables
+in the specified equation:
+. test [price]: foreign displ
+( 1) [price]foreign = 0
+( 2) [price]displacement = 0
+chi2( 2) = 25.19
+Prob > chi2 = 0.0000
+test [eqname1=eqname2] tests that all the coefficients in the two equations are equal. We cannot
+use that syntax here because there are different variables in the model:
+. test [price=weight]
+variables differ between equations
+(to test equality of coefficients in common, specify option common)
+r(111);
+The common option specifies a test of the equality coefficients common to the equations price
+and weight,
