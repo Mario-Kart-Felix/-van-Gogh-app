@@ -1,0 +1,14 @@
+//
+//  AppDelegate.swift
+//  MetalPaint
+//
+//  Created by Mario H Felix Jr
+//  Copyright © 2015 Sarah D. All rights reserved.
+//
+
+import UIKit
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
+}
