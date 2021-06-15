@@ -1,0 +1,278 @@
+Quite commonly in our applications, we need to create interactive report builders to let users build custom reports and dashboards. This usually involves selecting the metrics, groupings, date ranges, filters, and chart types. To help developers build such interactive components, we've created a query builder component in Cube.js client libraries.
+
+We've already covered how to use it in the React client library, and in this blog post, we'll talk about using it with Vue.js. The query builder component uses the scoped slots technique and lets developers implement their own render logic. This way it gives maximum flexibility for building a custom-tailored UI with minimal API. Below you can see the demo of the query builder component with Vuetify.
+
+You can find the live demo of the example here and its source code is available on Github.
+
+Example gif
+
+Setup a Demo Backend
+if you already have Cube.js backend up and running you can skip this step.
+
+Let's start by setting up a database with some sample data. We'll use PostgreSQL and our example e-commerce dataset for this tutorial. You can download and import it by running the following commands.
+
+$ curl <http://cube.dev/downloads/ecom-dump.sql> > ecom-dump.sql
+$ createdb ecom
+$ psql --dbname ecom -f ecom-dump.sql
+Next, install the Cube.js CLI if you don't have it already, and create a new project.
+
+$ npm install -g cubejs-cli
+$ cubejs create -d postgres vue-query-builder
+Cube.js uses environment variables for configuration, which starts with CUBEJS_. To configure the connection to our database, we need to specify the DB type and name. In the Cube.js project folder replace the contents of .env file with the following:
+
+CUBEJS_DB_NAME=ecom
+CUBEJS_DB_TYPE=postgres
+CUBEJS_API_SECRET=SECRET
+Now that we have everything configured, let's start the Cube.js development server with the following command.
+
+$ npm run dev
+Navigate to http://localhost:4000 in your browser to access the Cube.js Playground. It is a development environment that generates the Cube.js schema, creates scaffolding for charts, and lets you test your queries and debug them. It also has its own query builder, which lets you generate charts with different charting libraries.
+
+Backend setup
+
+Now let’s move on to building our own query builder with Vue.js! 💻
+
+Building a Query Builder
+We're going to use Vue CLI to generate a new project. Run the following command to install Vue CLI if you don't have it already.
+
+$ npm install -g @vue/cli
+To a create a new project with Vue CLI run the following command inside the Cube.js project folder.
+
+$ vue create dashboard-app
+To render the UI for query builder we are going to use Vuetify, a Vue UI Library with material components. Let's add it to our project. Run the following command inside the dashboard-app folder.
+
+$ vue add vuetify
+To create our color scheme you can open src/plugins/vuetify.js and add this code:
+
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
+
+Vue.use(Vuetify)
+
+export default new Vuetify({
++  theme: {
++    themes: {
++      light: {
++        primary: '#7A77FF',
++      },
++    },
++  },
+})
+Now we can start our frontend application.
+
+$ yarn serve
+You can check your newly created Vue app at http://localhost:8080. Next, let's install dependencies we'll need for building our Query Builder: Cube.js Vue client, Vue Chartkick, and Chart.js.
+
+$ npm install --save vue-chartkick chart.js core-js @cubejs-client/core @cubejs-client/vue
+Let's create a first simple Query Builder to allow users to select the metric from the dropdown list and then render it as a line chart over time.
+
+Cube.js Query Builder component can load the list of available measures based on the data schema from the backend. We can access these measures as an availableMeasures slot prop. We'll render that list with the v-select component from Vuetify. Then when the user selects the measure, we're going to use a setMeasures slot prop to update the measures in our query and finally render the query result as a line chart with Vue Chartkick and Chart.js.
+
+You can learn more about other slot props in the Query Builder component in the docs.
+
+Replace the content of the src/HelloWord.vue file with the following.
+
+<template>
+  <v-container fluid class="text-center background pa-0">
+    <query-builder :cubejs-api="cubejsApi" :query="query" css="width: 100%">
+      <template v-slot:builder="{measures,setMeasures,availableMeasures}">
+        <v-container fluid class="pa-4 pa-md-8 pt-6 background-white">
+          <v-row>
+            <v-col cols="12" md="2">
+              <v-select
+                multiple
+                label="Measures"
+                outlined
+                hide-details
+                :value="measures.map(i => (i.name))"
+                @change="setMeasures"
+                :items="availableMeasures.map(i => (i.name))"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+      <template v-slot="{ resultSet }">
+        <div class="pa-4 pa-md-8" v-if="resultSet">
+          <div class="border-light pa-4 pa-md-12">
+            <line-chart legend="bottom" :data="series(resultSet)"></line-chart>
+          </div>
+        </div>
+      </template>
+    </query-builder>
+  </v-container>
+</template>
+
+<script>
+import cubejs from '@cubejs-client/core'
+import { QueryBuilder } from '@cubejs-client/vue'
+
+const cubejsApi = cubejs("CUBEJS-TOKEN", {
+  apiUrl: `http://localhost:4000/cubejs-api/v1`
+});
+
+export default {
+  name: 'HelloWorld',
+
+  components: {
+    QueryBuilder
+  },
+  data: () => {
+    const query = {
+      limit: 100,
+      timeDimensions: [
+        {
+          dimension: 'LineItems.createdAt',
+          granularity: 'day',
+          dateRange: 'Last 30 days'
+        }
+      ],
+    }
+
+    return {
+      cubejsApi,
+      query
+    }
+  },
+  methods: {
+    series (resultSet) {
+      return resultSet.series().map(series => ({
+        name: series.key,
+        data: series.series.map(row => [row.x, row.value])
+      }))
+    }
+  }
+}
+</script>
+
+<style scopped>
+  .background {
+    background: #F3F3FB;
+    min-height: 100vh;
+  }
+  .background-white {
+    background: #fff;
+  }
+  .border-light {
+    background: #FFFFFF;
+    border-radius: 8px;
+  }
+</style>
+Now we can use updated HelloWorld component in our App component. Replace the content of the src/App.vue with the following.
+
+<template>
+  <v-app>
+    <v-app-bar
+      app
+      color="#43436B"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="<https://cube.dev/downloads/logo-full.svg>"
+          transition="scale-transition"
+        />
+      </div>
+    </v-app-bar>
+
+    <v-main>
+      <HelloWorld/>
+    </v-main>
+  </v-app>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld'
+
+export default {
+  name: 'App',
+
+  components: {
+    HelloWorld
+  }
+}
+</script>
+The last small change we need to make is to register the VueChartkick plugin. Update the src/main.js file.
+
+import Vue from 'vue'
+import App from './App.vue'
+import vuetify from './plugins/vuetify'
++ import Chart from 'chart.js'
++ import VueChartkick from 'vue-chartkick'
+Vue.config.productionTip = false
++ Vue.use(VueChartkick, { adapter: Chart })
+new Vue({
+  vuetify,
+  render: h => h(App)
+}).$mount('#app')
+We've just built our first simple query builder 🎉. Navigate to http://localhost:8080/ in your browser and you should be able to test it out.
+
+Measures example
+
+We can already plot the count of orders over time. But what if we want to see the breakdown of orders by the status? To do so, we'd need to introduce the dimensions dropdown to let users select the grouping option.
+
+We'll use more slot props for this: dimensions, availableDimensions and setDimensions. They work they same as slot props for measures allowing us to list the available dimensions and update the list of selected ones.
+
+Update src/HelloWorld.vue file.
+
+<template>
+  <v-container fluid class="text-center background pa-0">
+    <query-builder :cubejs-api="cubejsApi" :query="query" css="width: 100%">
+-    <template v-slot:builder="{measures,setMeasures,availableMeasures}"
++    <template 
++       v-slot:builder="{
++       measures,
++       setMeasures,
++       availableMeasures,
++       dimensions,
++       setDimensions,
++       availableDimensions
++       }"
++     >
+        <v-container fluid class="pa-4 pa-md-8 pt-6 background-white">
+            <v-row>
+              <v-col cols="12" md="2">
+                <v-select
+                  multiple
+                  label="Measures"
+                  outlined
+                  hide-details
+                  :value="measures.map(i => (i.name))"
+                  @change="setMeasures"
+                  :items="availableMeasures.map(i => (i.name))"
+                />
+              </v-col>
++             <v-col cols="12" md="2">
++               <v-select
++                 multiple
++                 label="Dimensions"
++                 outlined
++                 hide-details
++                 :value="dimensions.map(i => (i.name))"
++                 @change="setDimensions"
++                 :items="availableDimensions.map(i => (i.name))"
++               />
++             </v-col>
+            </v-row>
+          </v-container>
+        </template>
+        <template v-slot="{ resultSet }">
+            <div class="pa-4 pa-md-8" v-if="resultSet">
+              <div class="border-light pa-4 pa-md-12">
+                <line-chart legend="bottom" :data="series(resultSet)"></line-chart>
+              </div>
+            </div>
+          </template>
+      </query-builder>
+  </v-container>
+</template>
+Refresh your browser and now you should be able to select the dimensions for grouping as well!
+
+Dimension exmaple
+
+That's all for this tutorial. Congratulations on completing it! 🎉
+
+There are other controls you can add to your query builder like filters, date range, and granularity, as well as chart type selector. You can find a more complicated example with all these controls here and its source code here on Github.
