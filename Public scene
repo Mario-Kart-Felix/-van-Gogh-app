@@ -1,0 +1,12 @@
+public float duration; // scene duration in beats
+  
+  public Scene(float duration) {
+      this.duration = duration;
+  }
+  
+  public void setup() {}
+  public void draw(float beats) {}
+}
+
+class Timeline {
+  public Minim minim;
