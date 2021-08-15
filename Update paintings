@@ -1,0 +1,6 @@
+$thesaurusInputFilepath = $inputDirectory . '/CDA_Thesaurus_' . $date . '.xml';
+$paintingsRestorationInputFilepaths = [
+    $inputDirectory . '/CDA_RestDokumente_P3_' . $date . '.xml',
+];
+$paintingsInputFilepaths = [
+    $inputDirectory . '/CDA_Datenuebersicht_P1_' . $date . '.xml',
