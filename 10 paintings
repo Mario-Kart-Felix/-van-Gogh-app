@@ -1,0 +1,25 @@
+import { Painting } from "./paintings";
+console.log("-10 najpoznatijih umetnickih dela-");
+
+const header = document.createElement("h1");
+header.innerHTML = "10 najpoznatijih umetničkih dela";
+header.style.color = "black";
+header.style.fontFamily = "fantasy";
+header.style.textAlign = "center";
+document.body.appendChild(header);
+
+const paintings = [];
+paintings.push(new Painting(1,1642,"Noćna straža","Rembrant van Rajn"));
+paintings.push(new Painting(2,1748,"Mona Liza","Leonardo da Vinči"));
+paintings.push(new Painting(3,1590,"Poslednja večera","Leonardo da Vinči"));
+paintings.push(new Painting(4,1945,"Stvaranje Adama","Mikelanđelo"));
+paintings.push(new Painting(5,1785,"Zvezdana noć","Vinsent Van Gog"));
+paintings.push(new Painting(6,1879,"Vrisak","Edvard Munk"));
+paintings.push(new Painting(7,1956,"Istrajnost memorije","Salvador Dali"));
+paintings.push(new Painting(8,1666,"Devojka sa bisernom minđušom","Johanes Vermer"));
+paintings.push(new Painting(9,1780,"Autoportret bez brade","Vinsent Van Gog"));
+paintings.push(new Painting(10,1878,"Gernika","Pablo Pikaso"));
+
+paintings.forEach(painting => {
+    painting.showInformation();
+})
